@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,51 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Users {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  profile   Profiles?
+  bankAccounts Bank_Accounts[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Bank_Accounts {
+  id                     Int           @id @default(autoincrement())
+  user_id                Int
+  user                   Users         @relation(fields: [user_id], references: [id])
+  bank_name              String
+  bank_account_number    String
+  balance                Float         // Perubahan tipe data ke Float
+  transactions           Transaction[] @relation("bankAccount")
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+  sourceTransactions     Transaction[] @relation("sourceAccount")
+  destinationTransactions Transaction[] @relation("destinationAccount")
+}
+
+model Profiles {
+  id              Int      @id @default(autoincrement())
+  user_id         Int      @unique
+  user            Users    @relation(fields: [user_id], references: [id])
+  identity_type   String
+  identity_number String
+  address         String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Transaction {
+   id                      Int           @id @default(autoincrement())
+  source_account_id       Int
+  destination_account_id  Int
+  amount                  Float
+  sourceAccount           Bank_Accounts @relation("sourceAccount", fields: [source_account_id], references: [id])
+  destinationAccount      Bank_Accounts @relation("destinationAccount", fields: [destination_account_id], references: [id])
+  bank_account_id         Int 
+  bankAccount             Bank_Accounts @relation("bankAccount",fields: [bank_account_id], references: [id])
 }
