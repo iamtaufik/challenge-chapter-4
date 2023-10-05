@@ -4,8 +4,8 @@ const { getUsers, getUserById, createUser, updateUser, deleteUser } = require('.
 
 router.post('/', createUser);
 router.get('/', getUsers);
-router.get('/:id', getUserById);
-router.put('/:id', updateUser);
-router.delete('/:id', deleteUser);
+router.get('/:userId', getUserById);
+router.put('/:userId', updateUser);
+router.delete('/:userId', deleteUser);
 
 module.exports = router;
