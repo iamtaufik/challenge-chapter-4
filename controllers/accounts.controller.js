@@ -17,7 +17,7 @@ const createAccount = async (req, res, next) => {
     const account = await prisma.bank_Accounts.create({
       data: {
         bank_name: value.bank_name,
-        bank_account_number: value.bank_account_number,
+        bank_account_number: value.bank_account_number, // apakah perlu dikirimkan??
         balance: value.balance,
         userId: {
           connect: {
@@ -69,12 +69,30 @@ const getAccountById = async (req, res, next) => {
             email: true,
           },
         },
-        destinationTransactions: true,
-        sourceTransactions: true,
       },
     });
 
+    const sendTransactions = await prisma.transactions.findMany({
+      where: {
+        source_account_id: account.id,
+      },
+    });
+    const reciveTransactions = await prisma.transactions.findMany({
+      where: {
+        destination_account_id: account.id,
+      },
+      select: {
+        amount: true,
+        source_account_id: true,
+        destination_account_id: true,
+      },
+    });
+    account.history = {
+      sender: [...sendTransactions],
+      recive: [...reciveTransactions],
+    };
     account.user = account.userId;
+
     delete account.userId;
 
     if (!account) return res.status(404).json({ success: false, message: 'Not Found', data: null });

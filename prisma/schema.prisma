@@ -25,8 +25,8 @@ model Bank_Accounts {
   bank_name               String
   bank_account_number     String
   balance                 Float // Perubahan tipe data ke Float
-  sourceTransactions      Transactions[] @relation("SourceTransaction")
-  destinationTransactions Transactions[] @relation("DestinationTransaction")
+  senderTransactions      Transactions[] @relation("SourceTransaction")
+  reciveTransactions      Transactions[] @relation("DestinationTransaction")
   createdAt               DateTime       @default(now())
   updatedAt               DateTime       @updatedAt
 }
