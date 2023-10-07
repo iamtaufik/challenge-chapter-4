@@ -1,0 +1,59 @@
+# CREATE USER
+###
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "Hidayat",
+  "email": "hidayat@dev.com",
+  "password": "12345678",
+  "identity_type": "ktp",
+  "identity_number": "3451621627192"
+}
+
+# GET ALL USERS
+###
+GET http://localhost:3000/api/v1/users
+
+# GET DETAIL USER
+###
+GET http://localhost:3000/api/v1/users/1
+
+# CREATE ACCOUNT
+###
+POST http://localhost:3000/api/v1/accounts
+Content-Type: application/json
+
+{
+  "user_id": 1,
+  "bank_name": "BRI",
+  "bank_account_number": "081929182741332",
+  "balance": 1500000
+}
+
+# GET ALL ACCOUNTS
+###
+GET http://localhost:3000/api/v1/accounts
+
+# GET DETAIL ACCOUNT
+###
+GET http://localhost:3000/api/v1/accounts/1
+
+# CREATE TRANSACTION
+###
+POST http://localhost:3000/api/v1/transactions
+Content-Type: application/json
+
+{
+  "amount": 1000,
+  "source_account_id": 1,
+  "destination_account_id":2 
+}
+
+# GET ALL TRANSACTIONS
+###
+GET http://localhost:3000/api/v1/transactions
+
+# GET DETAIL TRANSACTIONS
+###
+GET http://localhost:3000/api/v1/transactions/1
