@@ -95,7 +95,22 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-const deleteUser = async (req, res, next) => {};
+const deleteUser = async (req, res, next) => {
+  try {
+    const userId = Number(req.params.userId);
+    const user = await prisma.users.delete({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) return res.status(404).json({ success: false, message: 'Not Found', data: null });
+
+    res.status(200).json({ success: true, message: 'Deleted', data: user });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   createUser,
