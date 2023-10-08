@@ -131,14 +131,8 @@ const getTransactionById = async (req, res, next) => {
   }
 };
 
-const updateTransaction = async (req, res) => {};
-
-const deleteTransaction = async (req, res) => {};
-
 module.exports = {
   createTransaction,
   getTransactions,
   getTransactionById,
-  updateTransaction,
-  deleteTransaction,
 };

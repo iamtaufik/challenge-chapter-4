@@ -103,14 +103,8 @@ const getAccountById = async (req, res, next) => {
   }
 };
 
-const updateAccount = async (req, res) => {};
-
-const deleteAccount = async (req, res) => {};
-
 module.exports = {
   createAccount,
   getAccounts,
   getAccountById,
-  updateAccount,
-  deleteAccount,
 };
