@@ -5,7 +5,5 @@ const { createAccount, getAccountById, deleteAccount, getAccounts, updateAccount
 router.post('/', createAccount);
 router.get('/', getAccounts);
 router.get('/:id', getAccountById);
-router.put('/:id', updateAccount);
-router.delete('/:id', deleteAccount);
 
 module.exports = router;
