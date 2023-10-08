@@ -72,6 +72,8 @@ const getAccountById = async (req, res, next) => {
       },
     });
 
+    if (!account) return res.status(404).json({ success: false, message: 'Not Found', data: null });
+
     const sendTransactions = await prisma.transactions.findMany({
       where: {
         source_account_id: account.id,

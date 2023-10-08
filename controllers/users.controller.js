@@ -1,4 +1,5 @@
 const prisma = require('../libs/prisma');
+const { createProfileSchema } = require('../validations/profiles.validation');
 const { createUserSchema } = require('../validations/users.validation');
 
 const createUser = async (req, res, next) => {
@@ -95,18 +96,44 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-const deleteUser = async (req, res, next) => {
+const updateUserProfile = async (req, res, next) => {
   try {
-    const userId = Number(req.params.userId);
-    const user = await prisma.users.delete({
+    const { userId } = req.params;
+    const { identity_type, identity_number, address } = req.body;
+    console.log(req.body);
+    const { value, error } = await createProfileSchema.validate({
+      identity_type,
+      identity_number,
+      address,
+    });
+
+    if (error) return res.status(400).json({ success: false, message: error.message, data: null });
+
+    console.log(value.identity_type);
+    const profile = await prisma.users.update({
       where: {
-        id: userId,
+        id: Number(userId),
+      },
+      data: {
+        profile: {
+          update: {
+            where: {
+              user_id: Number(userId),
+            },
+            data: {
+              identity_type: value.identity_type,
+              identity_number: value.identity_number,
+              address: value.address,
+            },
+          },
+        },
+      },
+      include: {
+        profile: true,
       },
     });
 
-    if (!user) return res.status(404).json({ success: false, message: 'Not Found', data: null });
-
-    res.status(200).json({ success: true, message: 'Deleted', data: user });
+    return res.status(200).json({ success: true, message: 'Profile updated', data: profile });
   } catch (error) {
     next(error);
   }
@@ -116,5 +143,5 @@ module.exports = {
   createUser,
   getUsers,
   getUserById,
-  deleteUser,
+  updateUserProfile,
 };
